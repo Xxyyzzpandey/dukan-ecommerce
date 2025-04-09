@@ -1,5 +1,4 @@
 import express from 'express'
-import mongoose from 'mongoose';
 import bodyParser from 'express'
 import userRouter from './routes/userroute.js'
 import productRouter from './routes/productroute.js'
@@ -7,6 +6,7 @@ import cartRouter from './routes/cartroute.js'
 import addressRouter from './routes/addressroute.js'
 import paymentRouter from './routes/paymentroute.js'
 import cors from 'cors';
+import connectdb from './db/connectdb.js';
 
 const app = express();
 
@@ -36,11 +36,12 @@ app.use('/api/address',addressRouter)
 // payment Router
 app.use('/api/payment',paymentRouter)
 
-mongoose.connect(
-  process.env.mongo_url,{
-    dbName:"MERN_E_Commerce"
-  }
-).then(()=>console.log("MongoDB Connected Succssfully...!")).catch((err)=>console.log(err));
+await connectdb();
+// mongoose.connect(
+//   process.env.mongo_url,{
+//     dbName:"MERN_E_Commerce"
+//   }
+// ).then(()=>console.log("MongoDB Connected Succssfully...!")).catch((err)=>console.log(err));
 
 const port = 1000;
 app.listen(port,()=>console.log(`Server is running on port ${port}`))
