@@ -3,6 +3,7 @@ import AppContext from "../context/AppContext";
 import axios from "axios";
 import TableProduct from "./tableproduct";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Checkout = () => {
   const { cart, userAddress, url, user, clearCart } = useContext(AppContext);
@@ -36,14 +37,29 @@ const Checkout = () => {
       console.log(" order response ", orderRepons);
       const { orderId, amount: orderAmount } = orderRepons.data;
 
-      var options = {
-        key: "rzp_test_gHH711O4gcSjCq", // Enter the Key ID generated from the Dashboard
-        amount: orderAmount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-        currency: "INR",
-        name: "Web Dev Mastery",
-        description: "Web Dev Mastery",
+      if (!orderId) {
+        toast.error("Failed to create payment order.", {
+          position: "top-right",
+          autoClose: 1500,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+          transition: Bounce,
+        });
+        return;
+      }
 
-        order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      var options = {
+        key: "rzp_test_5zZ84PgUMdnQ6Z", // Enter the Key ID generated from the Dashboard
+        amount: orderAmount , // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: "INR",
+        name: "pandey ltd",
+        description: "payment to pandey private limited",
+
+        order_id: orderId, 
         handler: async function (response) {
           const paymentData = {
             orderId: response.razorpay_order_id,
@@ -55,25 +71,53 @@ const Checkout = () => {
             userShipping: userAddress,
           };
 
-          const api = await axios.post(
-            `${url}/payment/verify-payment`,
-            paymentData
-          );
-
-          console.log("razorpay res ", api.data);
-
-          if (api.data.success) {
-            clearCart();
-            navigate("/oderconfirmation");
+          try {
+            const verifyResponse = await axios.post(
+              `${url}/payment/verify-payment`,
+              paymentData
+            );
+  
+            console.log("Payment verification result:", verifyResponse.data);
+  
+            if (verifyResponse.data.success) {
+              clearCart();
+              navigate("/orderconfirmation");
+            } else {
+              toast.error("payment verification failed", {
+                position: "top-right",
+                autoClose: 1500,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+              });
+            }
+          } catch (error) {
+            console.error("Verification failed:", error);
+            toast.error("something went wrong while verifing payment", {
+              position: "top-right",
+              autoClose: 1500,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+              transition: Bounce,
+            });
           }
         },
         prefill: {
-          name: "Web Dev Mastery",
-          email: "webdevmastery@gmail.com",
-          contact: "9000090000",
+          name: user.name,
+          email: user.email,
+          contact: user.contact,
         },
         notes: {
-          address: "Vijay Nagar Indore",
+          address: user.address,
+          user_note: "Please call before delivery"
         },
         theme: {
           color: "#3399cc",
