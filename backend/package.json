@@ -7,9 +7,11 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "build":"npm run dev"
-  },
+  "dev": "nodemon index.js",
+  "build": "echo 'No build step defined'", 
+  "start": "node index.js"
+},
+
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
