@@ -5,9 +5,9 @@ import { ToastContainer, toast, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const AppState = (props) => {
-  // const url = "http://localhost:1000/api";
+   const url = "http://localhost:1000/api";
 
-  const url = "https://mern-e-commerce-api-youtube.onrender.com/api";
+  //const url = "https://mern-e-commerce-api-youtube.onrender.com/api";
 
 
   const [products, setProducts] = useState([]);
@@ -81,34 +81,61 @@ const AppState = (props) => {
 
   // login user
   const login = async (email, password) => {
-    const api = await axios.post(
-      `${url}/user/login`,
-      { email, password },
-      {
-        headers: {
-          "Content-Type": "Application/json",
-        },
-        withCredentials: true,
-      }
-    );
-    // alert(api.data.message)
-    toast.success(api.data.message, {
-      position: "top-right",
-      autoClose: 1500,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    });
-
-    // console.log("user login ",api.data)
-    setToken(api.data.token);
-    setIsAuthenticated(true);
-    localStorage.setItem("token", api.data.token);
-    return api.data;
+    try {
+      const api = await axios.post(
+        `${url}/user/login`,
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+  
+      // Show success toast
+      if(api.data.success){
+      toast.success(api.data.message, {
+        position: "top-right",
+        autoClose: 1500,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+        transition: Bounce,
+      });
+  
+      // Set auth info
+      setToken(api.data.token);
+      setIsAuthenticated(true);
+      localStorage.setItem("token", api.data.token);
+  
+      return api.data;
+    }else{
+      toast.warn(api.data.message,{
+        theme: "dark",
+      })
+    }
+    } catch (error) {
+      console.error("Login error:", error);
+  
+      const errorMessage =
+        error.response?.data?.message || "Login failed. Please try again.";
+  
+      toast.error(errorMessage, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "dark",
+        transition: Bounce,
+      });
+  
+      return null;
+    }
   };
 
   // logout user
