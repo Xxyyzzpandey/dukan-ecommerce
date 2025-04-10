@@ -6,11 +6,13 @@
   "author": "",
   "type": "module",
   "main": "index.js",
-  "scripts": {
+  
+"scripts": {
   "dev": "nodemon index.js",
   "build": "echo 'No build step defined'", 
   "start": "node index.js"
 },
+
 
   "dependencies": {
     "bcryptjs": "^3.0.2",

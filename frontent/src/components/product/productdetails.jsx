@@ -7,7 +7,7 @@ const ProductDetail = () => {
   const [product, setProduct] = useState();
   const { id } = useParams();
 //   const url = "http://localhost:1000/api";
-const url = "https://mern-e-commerce-api-youtube.onrender.com/api";
+const url = "https://dukan-ecommerce-1.onrender.com";
 
   useEffect(() => {
     const fetchProduct = async () => {
