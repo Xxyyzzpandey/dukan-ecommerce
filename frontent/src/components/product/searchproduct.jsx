@@ -20,6 +20,7 @@ const SearchProduct = () => {
 
   return (
     <>
+      
       <div className="container text-center">
         <div className="container  d-flex justify-content-center align-items-center">
           <div className="row container d-flex justify-content-center align-items-center my-5">

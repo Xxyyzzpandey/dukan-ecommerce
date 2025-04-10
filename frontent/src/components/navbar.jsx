@@ -48,7 +48,7 @@ const Navbar = () => {
   return (
     <nav className="bg-gray-800 text-white shadow-md sticky top-0 z-50 w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
-        <Link to="/" className="text-lg font-bold">MERN E-Commerce</Link>
+        <Link to="/" className="text-lg font-bold">E-Dukan</Link>
 
         <form className="hidden md:flex items-center bg-gray-700 rounded-lg px-3 py-1" onSubmit={submitHandler}>
           <input

@@ -6,7 +6,8 @@ import RelatedProduct from "./relatedproduct";
 const ProductDetail = () => {
   const [product, setProduct] = useState();
   const { id } = useParams();
-  const url = "http://localhost:1000/api";
+//   const url = "http://localhost:1000/api";
+const url = "https://mern-e-commerce-api-youtube.onrender.com/api";
 
   useEffect(() => {
     const fetchProduct = async () => {
