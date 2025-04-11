@@ -6,14 +6,11 @@
   "author": "",
   "type": "module",
   "main": "index.js",
-  
-"scripts": {
-  "dev": "nodemon index.js",
-  "build": "echo 'No build step defined'", 
-  "start": "node index.js"
-},
-
-
+  "scripts": {
+    "dev": "nodemon index.js",
+    "build": "echo 'No build step defined'",
+    "start": "node index.js"
+  },
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
@@ -22,6 +19,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.0",
     "nodemon": "^3.1.9",
-    "razorpay": "^2.9.6"
+    "razorpay": "^2.9.6",
+    "serverless-http": "^3.2.0"
   }
 }

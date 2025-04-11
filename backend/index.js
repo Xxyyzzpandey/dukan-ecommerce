@@ -7,6 +7,7 @@ import addressRouter from './routes/addressroute.js'
 import paymentRouter from './routes/paymentroute.js'
 import cors from 'cors';
 import connectdb from './db/connectdb.js';
+import serverless from "serverless-http";
 
 const app = express();
 
@@ -45,3 +46,5 @@ await connectdb();
 
 const port = 1000;
 app.listen(port,()=>console.log(`Server is running on port ${port}`))
+
+export default serverless(app);
