@@ -1,4 +1,3 @@
-
 import React, { useContext, useEffect, useState } from "react";
 import AppContext from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +7,8 @@ const Cart = () => {
     useContext(AppContext);
   const [qty, setQty] = useState(0);
   const [price, setPrice] = useState(0);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -24,11 +25,23 @@ const Cart = () => {
     setQty(qty);
   }, [cart]);
 
+  const handleRemoveClick = (productId) => {
+    setSelectedProductId(productId);
+    setShowConfirm(true);
+  };
+
+  const confirmRemoval = () => {
+    if (selectedProductId) {
+      removeFromCart(selectedProductId);
+    }
+    setShowConfirm(false);
+    setSelectedProductId(null);
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white py-10">
       <div className="container mx-auto px-4">
-        {/* Empty Cart Message */}
-        {cart?.items?.length === 0 ? (
+        {!cart?.items || cart.items.length === 0 ? (
           <div className="text-center py-10">
             <h2 className="text-2xl font-semibold">Your cart is empty 😢</h2>
             <button
@@ -40,7 +53,6 @@ const Cart = () => {
           </div>
         ) : (
           <>
-            {/* Total Quantity & Price */}
             <div className="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-5 rounded-lg shadow-lg">
               <h2 className="text-xl md:text-2xl font-semibold">
                 Total Items: <span className="text-yellow-500">{qty}</span>
@@ -50,28 +62,21 @@ const Cart = () => {
               </h2>
             </div>
 
-            {/* Cart Items */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
               {cart?.items?.map((product) => (
                 <div
                   key={product._id}
                   className="bg-gray-800 p-5 rounded-lg shadow-lg flex flex-col items-center text-center"
                 >
-                  {/* Product Image */}
                   <img
                     src={product.imgSrc}
                     alt={product.title}
                     className="w-32 h-32 object-cover rounded-md border-2 border-yellow-500"
                   />
-
-                  {/* Product Details */}
                   <h3 className="mt-3 text-lg font-semibold">{product.title}</h3>
-                  <p className="text-green-400 text-lg font-semibold">
-                    ₹{product.price}
-                  </p>
+                  <p className="text-green-400 text-lg font-semibold">₹{product.price}</p>
                   <p className="text-sm text-gray-400">Qty: {product.qty}</p>
 
-                  {/* Action Buttons */}
                   <div className="flex justify-center items-center gap-3 mt-4">
                     <button
                       className="px-3 py-2 bg-yellow-500 hover:bg-yellow-400 text-gray-900 font-semibold rounded-md"
@@ -95,11 +100,7 @@ const Cart = () => {
                     </button>
                     <button
                       className="px-3 py-2 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-md"
-                      onClick={() => {
-                        if (confirm("Are you sure you want to remove this item?")) {
-                          removeFromCart(product?.productId);
-                        }
-                      }}
+                      onClick={() => handleRemoveClick(product?.productId)}
                     >
                       Remove
                     </button>
@@ -108,34 +109,46 @@ const Cart = () => {
               ))}
             </div>
 
-            {/* Checkout & Clear Cart Buttons */}
-            {cart ? <div className="flex flex-col md:flex-row justify-center items-center gap-5 mt-8">
-              { <button
+            <div className="flex flex-col md:flex-row justify-center items-center gap-5 mt-8">
+              <button
                 className="px-6 py-3 bg-green-500 hover:bg-green-400 text-white font-semibold rounded-md"
                 onClick={() => navigate("/shipping")}
               >
                 Proceed to Checkout
-              </button>}
+              </button>
               <button
                 className="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-md"
-                onClick={() => {
-                    clearCart();
-                }}
+                onClick={() => clearCart()}
               >
                 Clear Cart
               </button>
-            </div> :
-            <div className="flex flex-col md:flex-row justify-center items-center gap-5 mt-8">
-            { <button
-              className="px-6 py-3 bg-green-500 hover:bg-green-400 text-white font-semibold rounded-md"
-              onClick={() => navigate("/")}
-            >
-              continue shoping
-            </button>}
-          </div>}
+            </div>
           </>
         )}
       </div>
+
+      {/* Confirm Modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+          <div className="bg-white text-gray-900 p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <h3 className="text-lg font-semibold mb-4">Remove this item?</h3>
+            <div className="flex justify-center gap-4">
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500"
+                onClick={confirmRemoval}
+              >
+                Yes
+              </button>
+              <button
+                className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                onClick={() => setShowConfirm(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

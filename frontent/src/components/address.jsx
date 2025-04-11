@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import AppContext from "../context/AppContext";
 import { useNavigate } from "react-router-dom";
 
@@ -12,19 +11,19 @@ const Address = () => {
     city: "",
     state: "",
     country: "",
-     pincode: "",
+    pincode: "",
     phoneNumber: "",
   });
+
   const onChangerHandler = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-  const { fullName, address, city, state, country, pincode, phoneNumber } =
-    formData;
+
+  const { fullName, address, city, state, country, pincode, phoneNumber } = formData;
+
   const submitHandler = async (e) => {
     e.preventDefault();
-    // alert("Your form has been submited")
-
     const result = await shippingAddress(
       fullName,
       address,
@@ -34,8 +33,6 @@ const Address = () => {
       pincode,
       phoneNumber
     );
-
-    console.log("address adedd ",result)
 
     if (result.success) {
       navigate("/checkout");
@@ -50,141 +47,113 @@ const Address = () => {
       pincode: "",
       phoneNumber: "",
     });
-
-    // console.log(formData);
   };
+
   return (
-    <>
-      <div
-        className="container my-3 p-4"
-        style={{
-          border: "2px solid yellow",
-          borderRadius: "10px",
-        }}
-      >
-        <h1 className="text-center">Shipping Address</h1>
-        <form onSubmit={submitHandler} className="my-3">
-          <div className="row">
-            <div className="mb-3 col-md-4 ">
-              <label htmlFor="exampleInputEmail1" className="form-label">
-                Full Name
-              </label>
+    <div className="min-h-screen bg-gray-900 text-white py-10 px-4">
+      <div className="max-w-4xl mx-auto border-2 border-yellow-400 rounded-xl p-6 shadow-xl">
+        <h2 className="text-2xl sm:text-3xl text-center font-bold mb-8">Shipping Address</h2>
+        <form onSubmit={submitHandler} className="space-y-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <label className="block mb-1 font-medium">Full Name</label>
               <input
                 name="fullName"
-                value={formData.fullName}
+                value={fullName}
                 onChange={onChangerHandler}
                 type="text"
-                className="form-control bg-dark text-light"
-                id="exampleInputEmail13"
-                aria-describedby="emailHelp"
+                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                required
               />
             </div>
-            <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputEmail1" className="form-label">
-                Country
-              </label>
+            <div>
+              <label className="block mb-1 font-medium">Country</label>
               <input
                 name="country"
-                value={formData.country}
+                value={country}
                 onChange={onChangerHandler}
                 type="text"
-                className="form-control bg-dark text-light"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
+                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                required
               />
             </div>
-            <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputPassword1" className="form-label">
-                State
-              </label>
+            <div>
+              <label className="block mb-1 font-medium">State</label>
               <input
                 name="state"
-                value={formData.state}
+                value={state}
                 onChange={onChangerHandler}
                 type="text"
-                className="form-control bg-dark text-light"
-                id="exampleInputPassword1"
+                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                required
               />
             </div>
-          </div>
-
-          <div className="row">
-            <div className="mb-3 col-md-4 ">
-              <label htmlFor="exampleInputEmail1" className="form-label">
-                City
-              </label>
+            <div>
+              <label className="block mb-1 font-medium">City</label>
               <input
                 name="city"
-                value={formData.city}
+                value={city}
                 onChange={onChangerHandler}
                 type="text"
-                className="form-control bg-dark text-light"
-                id="exampleInputEmail13"
-                aria-describedby="emailHelp"
+                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                required
               />
             </div>
-            <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputEmail1" className="form-label">
-                Pincode
-              </label>
+            <div>
+              <label className="block mb-1 font-medium">Pincode</label>
               <input
                 name="pincode"
-                value={formData.pincode}
+                value={pincode}
                 onChange={onChangerHandler}
                 type="number"
-                className="form-control bg-dark text-light"
-                id="exampleInputEmail1"
-                aria-describedby="emailHelp"
+                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                required
               />
             </div>
-            <div className="mb-3 col-md-4">
-              <label htmlFor="exampleInputPassword1" className="form-label">
-                PhoneNumber
-              </label>
+            <div>
+              <label className="block mb-1 font-medium">Phone Number</label>
               <input
                 name="phoneNumber"
-                value={formData.phoneNumber}
+                value={phoneNumber}
                 onChange={onChangerHandler}
                 type="number"
-                className="form-control bg-dark text-light"
-                id="exampleInputPassword1"
+                className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                required
               />
             </div>
           </div>
 
-          <div className="row">
-            <div className="mb-3">
-              <label htmlFor="exampleInputPassword1" className="form-label">
-                Address/Nearby
-              </label>
-              <textarea
-                name="address"
-                value={formData.address}
-                onChange={onChangerHandler}
-                type="text"
-                className="form-control bg-dark text-light"
-                id="exampleInputPassword1"
-              />
-            </div>
+          <div>
+            <label className="block mb-1 font-medium">Address / Nearby</label>
+            <textarea
+              name="address"
+              value={address}
+              onChange={onChangerHandler}
+              className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              required
+            />
           </div>
 
-          <div className="d-grid col-6 mx-auto my-3">
-            <button type="submit" className="btn btn-primary" 
-            style={{fontWeight:'bold'}}>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded font-semibold shadow"
+            >
               Submit
             </button>
+            {userAddress && (
+              <button
+                type="button"
+                onClick={() => navigate("/checkout")}
+                className="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-2 rounded font-semibold shadow"
+              >
+                Use Old Address
+              </button>
+            )}
           </div>
         </form>
-        {userAddress && (
-          <div className="d-grid col-6 mx-auto my-3">
-            <button className="btn btn-warning"
-            onClick={()=>navigate('/checkout')}
-            style={{fontWeight:'bold'}}
-            >Use Old Address</button>
-          </div>
-        )}
       </div>
-    </>
+    </div>
   );
 };
 
